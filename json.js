@@ -24,7 +24,7 @@ console.log(arrJson, "JSON数组");
 const newArr = JSON.parse(arrJson);
 console.log(newArr, "转回数组");
 // ==================== 5. JSON 的特点 ====================
-// JSON 中的键必须用双引号
+// JSON 中的键必须用双引号git pushh p
 const json = { "title": "jsjsjsj", "price": 666, "order": "adad" };
 console.log(json, "JSON字符串");
 console.log(typeof json, "JSON字符串类型");
