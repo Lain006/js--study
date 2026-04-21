@@ -1,81 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Axios Example</title>
+    <title>Axios Demo</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
         }
-
-        #result,
-        #postResult,
-        #asyncGetResult,
-        #asyncPostResult {
-            margin-top: 20px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+        h1 {
+            font-size: 1.8em;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
         }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .form-group input {
-            width: 300px;
-            padding: 8px;
-        }
-
+        .method-title { color: #333; }
         button {
-            padding: 8px 15px;
             background-color: #4CAF50;
             color: white;
+            padding: 8px 16px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            margin-right: 10px;
+            font-size: 14px;
+            margin: 8px 0;
         }
-
-        button:hover {
-            background-color: #45a049;
+        button:hover { background-color: #45a049; }
+        .form-group { margin: 10px 0; }
+        .form-group label { display: block; margin-bottom: 4px; font-size: 14px; }
+        .form-group input {
+            width: 280px;
+            padding: 6px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
         }
-
-        hr {
-            margin: 30px 0;
-            border: 0;
-            border-top: 1px solid #eee;
+        #result, #postResult, #asyncGetResult, #asyncPostResult {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 4px;
+            min-height: 40px;
         }
-
-        h1 {
-            color: #2c3e50;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
-        }
-
-        .method-title {
-            color: #e74c3c;
-            font-weight: bold;
-        }
+        hr { margin: 30px 0; border: none; border-top: 1px solid #eee; }
     </style>
 </head>
-
 <body>
-    <h1>Axios GET Request Example</h1>
+
+    <!-- GET 请求示例 -->
+    <h1>Axios <span class="method-title">GET</span> Request Example</h1>
     <button id="fetchButton">Fetch Users</button>
     <div id="result"></div>
 
-    <!-- 新增 POST 请求示例 -->
     <hr>
-    <h1>Axios POST Request Example</h1>
+
+    <!-- POST 请求示例 -->
+    <h1>Axios <span class="method-title">POST</span> Request Example</h1>
     <div class="form-group">
         <label for="titleInput">标题:</label>
         <input type="text" id="titleInput" placeholder="输入标题">
@@ -87,14 +69,16 @@
     <button id="postButton">提交数据</button>
     <div id="postResult"></div>
 
-    <!-- 新增 Async/Await GET 请求示例 -->
     <hr>
+
+    <!-- 新增 Async/Await GET 请求示例 -->
     <h1>Axios <span class="method-title">Async/Await</span> GET Request Example</h1>
     <button id="asyncFetchButton">Async 获取用户</button>
     <div id="asyncGetResult"></div>
 
-    <!-- 新增 Async/Await POST 请求示例 -->
     <hr>
+
+    <!-- 新增 Async/Await POST 请求示例 -->
     <h1>Axios <span class="method-title">Async/Await</span> POST Request Example</h1>
     <div class="form-group">
         <label for="asyncTitleInput">标题:</label>
@@ -113,47 +97,127 @@
     <script>
         // 防抖函数的定义：一定时间内，多次执行，只执行最后一次
         /*
-          防抖函数：控制函数执行频率的一种方式
-          原理：当持续触发某事件时，函数不会立即执行，而是等到停止触发后延迟一段时间再执行
-          用途：适用于搜索框、窗口大小调整或鼠标点击的场景等，避免频繁触发事件，导致性能问题
+            防抖函数：控制函数执行频率的一种方式
+            原理：当持续触发事件时，函数不会立刻执行，而是等到触发停止后延迟一段时间再执行
+            用途：适用与搜索框，窗口大小调整或按钮点击的场景等场景，避免频繁触发事件，导致性能问题
         */
         function debounce(func, delay) {
-            // 定义一个计时器变量，用于存储setTimeout的返回值
-            let timer;
-            // 返回一个新函数，这个函数会在合适的时候调用原始func函数
+            let timer;  //定义一个计时器变量，用于存储setTimeout的返回值
+            // 返回一个新函数，这个函数会在适当的时候调用原始函数func
             return function () {
-                // 每次触发时，清除之前的计时器，取消之前等待执行的函数
-                clearTimeout(timer);
+                clearTimeout(timer); // 每次触发时，清楚之前的定时器，取消之前等待执行的函数
                 // 重新设置一个定时器，delay毫秒后执行func函数
                 timer = setTimeout(() => {
                     // apply用于保持this上下文并传递所有参数
                     func.apply(this, arguments);
-                     // 这里的this指向调用这个返回函数的对象，arguments是调用时传入的所有参数
-                }, delay);
+                    // 这里的this指向调用这个返回函数的对象，// arguments是调用时传入的所有参数
+                }, delay)
             }
         }
 
         // 节流函数定义：一定时间内，只执行一次
-        // 节流函数适用于滚动事件、鼠标移动、页面缩放等高频触发场景
+        // 节流函数适用于滚动事件，鼠标移动，页面缩放等高频触发常见
         /*
-           节流函数：控制函数执行频率的另一种方式
-           原理：无论事件触发多少次，函数在此指定时间内只执行一次
-           用途：适用于滚动条、鼠标移动、页面缩放等场景，避免频繁触发事件，导致性能问题
-           */
-           function throttle(func, delay) {
-               // 记录上一次函数执行的时间戳
-               let lastTime = 0;
-                // 返回一个新函数，这个函数会在合适的时候调用原始func函数
-               return function() {
-                   const now = new Date().getTime();   // 获取当前时间戳
-                   // 判断当前时间与上一次执行时间的差值是否大于等于指定的延迟时间
-                   if(now - lastTime >= delay) {
-                       // 如果满足条件，则执行原始函数func并保持this上下文并传递所有参数
-                       func.apply(this, arguments);
-                       // 更新上一次执行的时间戳为当前时间
-                       lastTime = now;
-                    }
-                    // 否则，什么也不做，即节流
-               }
-           }
-       </script>
+            节流函数：控制函数执行频率的另一种方式
+            原理：无论事件触发多频繁，函数在此指定时间内只执行一次
+            用途：适用与滚动事件，鼠标移动，页面缩放等场景，避免频繁触发事件，导致性能问题
+        */
+        function throttle(func, delay) {
+            let lastTime = 0; // 记录上一次函数执行的时间戳
+            // 返回一个新函数，这个函数会在合适的时候调用原始函数 func
+            return function() {
+                const now = new Date().getTime();  // 获取当前时间戳
+                // 判断当前时间与上次执行时间的差是否大于等于指定的延迟时间
+                if(now - lastTime >= delay) {
+                    // 如果满足条件，则执行原始函数func并保持this上下文并传递所有参数
+                    func.apply(this, arguments);
+                    lastTime = now; // 更新上次执行的时间戳为当前时间
+                }
+                // 否则，什么也不做，即节流
+            }
+        }
+
+        // get请求
+        // 当用户可能快速多次点击按钮的时候，我们只希望处理最后一次点击，所以我们用防抖函数
+        document.getElementById("fetchButton").addEventListener('click', debounce(function () {
+            axios.get("https://s5.360game.360.cn/to5/mini/v21/category.html").then(function (response) {
+                // 处理成功情况
+                console.log(response, '++++++++++++++++++++++++');
+                const users = response.data.data;
+                console.log(users, '--------------------------');
+                const resultDiv = document.getElementById("result");
+                resultDiv.innerHTML = '<h2>Users Found:</h2>' + users.map(user =>
+                    `<li>${user.name}</li>`).join('');
+            }).catch(function(error){
+                // 失败的情况
+                console.log(error, 'erererererererererer+');
+            })
+        }, 1000)) // 1秒的延迟，用户停止点击1秒后才发送请求
+
+        // post请求
+        // 即使用户疯狂点击提交按钮，我们也给他进行限制，也是最多让他5秒内只处理一次点击，所以我们用节流函数
+        document.getElementById('postButton').addEventListener('click', throttle(function () {
+            const title = document.getElementById('titleInput').value || '默认标题';
+            const body = document.getElementById('bodyInput').value || '默认内容';
+            const postData = {
+                title: title,
+                body: body,
+                userId: 1
+            };
+            axios.post('https://jsonplaceholder.typicode.com/posts', postData).then(function (response) {
+                // 处理成功情况
+                console.log('post成功++++++++++++', response.data);
+                const postResultDiv = document.getElementById('postResult');
+                postResultDiv.innerHTML =
+                    `<h3>Post结果</h3>
+                    <p><strong>响应状态：</strong>${response.status}</p>
+                    <p><strong>响应状态：</strong>${response.data.id}</p>
+                    <p><strong>响应状态：</strong>${response.data.title}</p>
+                    <p><strong>响应状态：</strong>${response.data.body}</p>`;
+            }).catch(function (error) {
+                // 处理错误的情况
+                console.error('post失败+++++++++++++++', error);
+                document.getElementById('postResult').innerHTML =
+                    `<p>提交数据时出错</p><p><strong>错误信息</strong>: ${error}</p>`;
+            })
+        }, 2000))
+
+        // Async/Await GET 请求
+        document.getElementById('asyncFetchButton').addEventListener('click', debounce(async function () {
+            try {
+                const response = await axios.get("https://s5.360game.360.cn/to5/mini/v21/category.html");
+                const users = response.data.data;
+                document.getElementById("asyncGetResult").innerHTML =
+                    '<h2>Users Found:</h2>' + users.map(user => `<li>${user.name}</li>`).join('');
+            } catch (error) {
+                console.log(error);
+                document.getElementById("asyncGetResult").innerHTML = `<p>请求失败: ${error.message}</p>`;
+            }
+        }, 1000))
+
+        // Async/Await POST 请求
+        document.getElementById('asyncPostButton').addEventListener('click', throttle(async function () {
+            const title = document.getElementById('asyncTitleInput').value || '默认标题';
+            const body = document.getElementById('asyncBodyInput').value || '默认内容';
+            try {
+                const response = await axios.post('https://jsonplaceholder.typicode.com/posts', {
+                    title: title,
+                    body: body,
+                    userId: 1
+                });
+                document.getElementById('asyncPostResult').innerHTML =
+                    `<h3>Post结果</h3>
+                    <p><strong>响应状态：</strong>${response.status}</p>
+                    <p><strong>响应状态：</strong>${response.data.id}</p>
+                    <p><strong>响应状态：</strong>${response.data.title}</p>
+                    <p><strong>响应状态：</strong>${response.data.body}</p>`;
+            } catch (error) {
+                console.error(error);
+                document.getElementById('asyncPostResult').innerHTML =
+                    `<p>提交数据时出错</p><p><strong>错误信息</strong>: ${error}</p>`;
+            }
+        }, 2000))
+
+    </script>
+</body>
+</html>
